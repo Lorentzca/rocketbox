@@ -1,0 +1,21 @@
+name: rocketbox
+version: 0.0.1
+inherits: wercker/ubuntu12.04-webessentials@0.0.3
+type: service
+platform: ubuntu@12.04
+description: wercker box for rocket
+keywords:
+  - rocket
+script: |
+  sudo apt-get update -y
+  sudo apt-get update -y
+  sudo apt-get install -y curl
+
+  wget https://github.com/coreos/rocket/releases/download/v0.2.0/rocket-v0.2.0.tar.gz
+  tar xzvf rocket-v0.2.0.tar.gz
+
+  curl -O https://coreos.com/dist/pubkeys/aci-pubkeys.gpg
+  gpg --with-fingerprint aci-pubkeys.gpg
+
+  sudo mkdir -p /etc/rkt/trustedkeys/prefix.d/coreos.com/etcd/
+  sudo mv aci-pubkeys.gpg /etc/rkt/trustedkeys/prefix.d/coreos.com/etcd/$(echo "8B86 DE38 890D DB72 9186  7B02 5210 BD88 8818 2190" | tr -d "[:space:]" | tr '[:upper:]' '[:lower:]')
